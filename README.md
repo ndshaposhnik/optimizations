@@ -1,6 +1,15 @@
 # esd-ddp
 [Efficient SciDev. Homework -- DDP](https://drive.google.com/drive/folders/1LWLkut23ovI0oza4bYHRLvGuqnMrz5WJ)
 
+Cократила обучающий датасет в два раза.
+Провела эксперименты перебирала:
+* модель
+* c ddp и без
+* ddp_n_proc - 2/4
+* batch_size - 64/128/256
+Обучала все на 15 эпохах, результаты в таблички по каждой 5
+
+
 
 | model         | ddp           | batch_size    | epoch          | ddp_n_proc    | accuracy      |
 | ------------- | ------------- | ------------- | -------------- | ------------- | ------------- |
