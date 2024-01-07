@@ -96,4 +96,6 @@ B **lightning_utils.py** перевод в lightning
 | MobileNetv3   | +             |256            |4               |2.654641       |95.10962       |
 
 Графики зависимости времени от количества процессов:
-<img width="590" alt="Screenshot 2024-01-07 at 22 46 12" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/db16ae57-c8c0-4c03-9fec-cfd72aa86b57">
+<img width="590" alt="Screenshot 2024-01-07 at 22 48 54" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/e4e853d8-4a8d-4c8f-8af5-eb4b0a5216bc"> <img width="590" alt="Screenshot 2024-01-07 at 22 44 55" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/8e8b3e28-c84e-48b6-bd13-8376c60a5aa0">
+
+
