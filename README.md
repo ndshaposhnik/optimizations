@@ -96,11 +96,14 @@ B **lightning_utils.py** перевод в lightning
 | MobileNetv3   | +             |256            |4               |2.654641       |95.10962       |
 
 Графики зависимости времени батча от количества процессов:
- <img width="590" alt="Screenshot 2024-01-07 at 22 44 55" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/8e8b3e28-c84e-48b6-bd13-8376c60a5aa0">
- <img width="590" alt="Screenshot 2024-01-07 at 22 48 54" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/e4e853d8-4a8d-4c8f-8af5-eb4b0a5216bc">
+
+<img width="590" alt="Screenshot 2024-01-07 at 22 44 55" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/8e8b3e28-c84e-48b6-bd13-8376c60a5aa0">
+<img width="590" alt="Screenshot 2024-01-07 at 22 48 54" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/e4e853d8-4a8d-4c8f-8af5-eb4b0a5216bc">
+
 Графики зависимости времени эпохи от количества процессов:
- <img width="590" alt="Screenshot 2024-01-07 at 22 45 21" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/e20b428e-b75c-4907-ac7f-a3429c46b8a9">
- <img width="590" alt="Screenshot 2024-01-07 at 22 49 14" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/07b556d7-b560-406b-98c1-6eec83201369">
+
+<img width="590" alt="Screenshot 2024-01-07 at 22 45 21" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/e20b428e-b75c-4907-ac7f-a3429c46b8a9">
+<img width="590" alt="Screenshot 2024-01-07 at 22 49 14" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/07b556d7-b560-406b-98c1-6eec83201369">
 
 
 
