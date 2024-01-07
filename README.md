@@ -108,10 +108,11 @@ B **lightning_utils.py** перевод в lightning
 
 Графики зависимости времени батча от размера бачта:
 
-<img width="590" alt="Screenshot 2024-01-07 at 22 56 04" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/10cc6350-758a-4dde-b7cf-697ecad785cc">
+<img width="590" alt="Screenshot 2024-01-07 at 22 57 06" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/14bb3d9b-5209-4b06-bbd2-28a3ce93b376">
 <img width="590" alt="Screenshot 2024-01-07 at 22 36 49" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/877892fd-a0cd-4991-9d56-ef35ef2a20a5">
 
 Графики зависимости времени эпохи от размера батча:
 
+<img width="590" alt="Screenshot 2024-01-07 at 22 57 34" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/680ba4f9-09b0-4737-99f4-c6971c886f86">
 <img width="590" alt="Screenshot 2024-01-07 at 22 36 04" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/71b1f89f-c6ad-4a48-9efc-79fcc9cb4105">
 
