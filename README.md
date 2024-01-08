@@ -105,16 +105,12 @@ B **lightning_utils.py** перевод в lightning
 <img width="590" alt="Screenshot 2024-01-07 at 22 45 21" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/e20b428e-b75c-4907-ac7f-a3429c46b8a9">
 <img width="590" alt="Screenshot 2024-01-07 at 22 49 14" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/07b556d7-b560-406b-98c1-6eec83201369">
 
+Графики качества:
 
-Графики зависимости времени батча от размера бачта:
+<img width="925" alt="Screenshot 2024-01-08 at 21 40 43" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/6e4f0e20-dc81-4a21-aeef-c1a04f3b8921">
+<img width="925" alt="Screenshot 2024-01-08 at 21 37 00" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/b4ffdf4f-bff7-4e80-9af4-db13b69ecb1a">
 
-<img width="590" alt="Screenshot 2024-01-07 at 22 57 06" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/14bb3d9b-5209-4b06-bbd2-28a3ce93b376">
-<img width="590" alt="Screenshot 2024-01-07 at 22 36 49" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/877892fd-a0cd-4991-9d56-ef35ef2a20a5">
 
-Графики зависимости времени эпохи от размера батча:
-
-<img width="590" alt="Screenshot 2024-01-07 at 22 57 34" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/680ba4f9-09b0-4737-99f4-c6971c886f86">
-<img width="590" alt="Screenshot 2024-01-07 at 22 36 04" src="https://github.com/a4-ai/esd23-distrib-av-onishchenko/assets/79263390/71b1f89f-c6ad-4a48-9efc-79fcc9cb4105">
 
 *Выводы:*
 
