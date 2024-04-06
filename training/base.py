@@ -28,8 +28,8 @@ def train_base(
         val_acc = 0
         model.train(True) 
         num = 0
-        train_time = 0
-        batch_time = []
+        # train_time = 0
+        # batch_time = []
         for X_batch, y_batch in tqdm(train_loader):
             start_time = time.time()
             if use_fp16:
@@ -45,33 +45,36 @@ def train_base(
                 loss.backward()
                 optimizer.step()
             optimizer.zero_grad()
-            train_loss += loss.detach()*len(X_batch)
+            train_loss += loss.detach() * len(X_batch)
             num += len(X_batch)
             duration = torch.Tensor([time.time() - start_time])
-            batch_time.append(duration)
-            train_time += duration
+            # batch_time.append(duration)
+            # train_time += duration
         train_loss /= num
         history['loss']['train'].append(train_loss)
-        history['time']['epoch'].append(train_time)
-        history['time']['batch'].append(batch_time)
+        # history['time']['epoch'].append(train_time)
+        # history['time']['batch'].append(batch_time)
             
-        if epoch%val_frequency == 0:
+        '''
+        if epoch % val_frequency == 0:
             model.train(False) 
             num = 0
             for X_batch, y_batch in val_loader:
                 logits = model(X_batch)
-                acc = Accuracy(task="multiclass", num_classes=10)(logits.max(1)[1], y_batch)*len(X_batch)
+                acc = Accuracy(task="multiclass", num_classes=10)(logits.max(1)[1], y_batch) * len(X_batch)
                 val_acc += acc
                 num += len(X_batch)
             val_acc /= num
             history['acc']['val'].append(val_acc)
+    '''
 
     torch.save(model.state_dict(), checkpoint_path)
-    os.mkdir(history_path)
+    if not os.path.isdir(history_path):
+        os.mkdir(history_path)
     np.save(history_path + "/train_loss", np.array(history['loss']['train']))
-    np.save(history_path + "/time_epoch", np.array(history['time']['epoch']))
-    np.save(history_path + "/time_batch", np.array(history['time']['batch']))
-    np.save(history_path + "/val_acc", np.array(history['acc']['val']))
+    # np.save(history_path + "/time_epoch", np.array(history['time']['epoch']))
+    # np.save(history_path + "/time_batch", np.array(history['time']['batch']))
+    # np.save(history_path + "/val_acc", np.array(history['acc']['val']))
     
 
 def run_base(num_epochs, batch_size, checkpoint_path, history_path, transposition, use_mobilenetv3=False, use_fp16=False, val_frequency=1):
@@ -81,7 +84,10 @@ def run_base(num_epochs, batch_size, checkpoint_path, history_path, transpositio
     else:
         model = timm.create_model('mobilenetv3_small_100', in_chans=1, num_classes=10,  pretrained=False) 
     loss = nn.CrossEntropyLoss()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
+
+    dim = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    optimizer = torch.optim.CompressedSGD(dim, model.parameters(), lr=0.001)
+
     scaler = None
     if use_fp16:
         scaler = torch.cuda.amp.GradScaler()
