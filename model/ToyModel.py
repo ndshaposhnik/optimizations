@@ -7,5 +7,6 @@ class ToyModel(nn.Module):
         self.net1 = nn.Linear(init_dim, 10)
         self.relu = nn.ReLU()
         self.net2 = nn.Linear(10, num_classes)
+
     def forward(self, x):
         return self.net2(self.relu(self.net1(self.flatten(x))))

@@ -11,9 +11,9 @@ import copy
 __all__ = ['SGD', 'sgd']
 
 class CompressedSGD(Optimizer):
-    def __init__(self, dim, params, lr=required, momentum=0, dampening=0,
+    def __init__(self, params, lr=required, momentum=0, dampening=0,
                  weight_decay=0, nesterov=False, *, maximize: bool = False, foreach: Optional[bool] = None,
-                 differentiable: bool = False):
+                 differentiable: bool = False, compressor='NoneCompressor', **kwargs):
         if lr is not required and lr < 0.0:
             raise ValueError("Invalid learning rate: {}".format(lr))
         if momentum < 0.0:
@@ -27,11 +27,24 @@ class CompressedSGD(Optimizer):
                         differentiable=differentiable)
         if nesterov and (momentum <= 0 or dampening != 0):
             raise ValueError("Nesterov momentum requires a momentum and zero dampening")
+
         super().__init__(params, defaults)
 
-        self.compressor = MultiplicationPenaltyCompressor(
-            dim=dim, alpha=0.1, penalty=0.8
-        )
+        self.compressor_name = compressor
+        if compressor == 'None':
+            self.compressor = NoneCompressor(**kwargs)
+        elif compressor == 'RandK':
+            self.compressor = RandKCompressor(**kwargs)
+        elif compressor == 'MultiplicationPenalty':
+            self.compressor = MultiplicationPenaltyCompressor(**kwargs)
+        elif compressor == 'SubtractionPenalty':
+            self.compressor = SubtractionPenaltyCompressor(**kwargs)
+        elif compressor == 'ExpSmoothing':
+            self.compressor = ExpSmoothingCompressor(**kwargs)
+        elif compressor == 'BanLastM':
+            self.compressor = BanLastMCompressor(**kwargs)
+        else:
+            assert False, f'Unknown compressor: {compressor}'
 
     def __setstate__(self, state):
         super().__setstate__(state)

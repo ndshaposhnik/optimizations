@@ -20,9 +20,10 @@ def change_probability_multiplication(probability: Tensor, mask: Tensor, penalty
     n = probability.numel()
     k = mask.sum().item()
     assert k > 0, 'empty mask'
+
     inv_mask = torch.ones_like(mask) - mask
-    sumReduced = torch.sum(mask * probability * penalty).item()
-    probability -= mask * probability * penalty
+    sumReduced = torch.sum(mask * probability * (1 - penalty)).item()
+    probability -= mask * probability * (1 - penalty)
     probability += inv_mask * sumReduced / (n - k)
     return probability
 
@@ -44,8 +45,8 @@ def change_probability_subtraction(probability, mask, penalty):
 
 
 class BaseCompressor(ABC):
-    def __init__(dim: int):
-        pass
+    def __init__(self, dim: int):
+        self.dim = dim
 
     @abstractmethod
     def compress(self, tensor: Tensor) -> Tuple[Tensor, int]:
@@ -53,27 +54,31 @@ class BaseCompressor(ABC):
 
 
 class NoneCompressor(BaseCompressor):
+    def __init__(self, dim: int):
+        super().__init__(dim)
+        
     def compress(self, tensor: Tensor) -> Tuple[Tensor, int]:
-        return (tensor, tensor.numel())
+        return (tensor, self.dim)
 
 
 class RandKCompressor(BaseCompressor):
     def __init__(self, dim: int, alpha: float):
         assert alpha > 0, 'Number of transmitted coordinates must be positive'
-        self.dim = dim
+        super().__init__(dim)
         self.k = int(alpha * dim)
 
     def compress(self, tensor: Tensor) -> Tuple[Tensor, int]:
         mask = torch.zeros_like(tensor).index_fill_(
-            0, torch.randperm(tensor.numel(), device='cpu')[:k], torch.tensor(1)
+            0, torch.randperm(tensor.numel(), device='cpu')[:self.k], torch.tensor(1)
         )
         tensor *= mask
         return (tensor, self.k)
 
 
-class MultiplicationPenaltyCompressor():
+class MultiplicationPenaltyCompressor(BaseCompressor):
     def __init__(self, dim, alpha, penalty):
-        self.dim = dim
+        print("dim =", dim)
+        super().__init__(dim)
         self.k = int(self.dim * alpha)
         self.probability = torch.full((self.dim,), 1 / self.dim, dtype=torch.float, device='cpu')
         self.penalty = penalty
@@ -84,9 +89,9 @@ class MultiplicationPenaltyCompressor():
         return tensor * mask, self.k
 
 
-class SubtractionPenaltyCompressor():
+class SubtractionPenaltyCompressor(BaseCompressor):
     def __init__(self, dim, alpha, penalty):
-        self.dim = dim
+        super().__init__(dim)
         self.k = int(self.dim * alpha)
         self.probability = torch.full((self.dim,), 1 / self.dim, dtype=torch.float, device='cpu')
         self.penalty = penalty
@@ -97,16 +102,43 @@ class SubtractionPenaltyCompressor():
         return tensor * mask, self.k
 
 
-class ExpSmoothingCompressor():
+class ExpSmoothingCompressor(BaseCompressor):
     def __init__(self, dim, alpha, beta):
-        self.dim = dim
+        super().__init__(dim)
         self.k = int(self.dim * alpha)
-        self.penalty= torch.zeros(self.dim, dtype=torch.float, device='cpu')
+        self.penalty = torch.zeros(self.dim, dtype=torch.float, device='cpu')
         self.beta = beta
 
     def compress(self, tensor):
         mask = getTopKMask(self.penalty, self.k)
         inv_mask = torch.ones_like(mask) - mask
-        self.penalty = self.beta *self.penalty + (1 - self.beta) * inv_mask
+        self.penalty = (1 - self.beta) * self.penalty + self.beta * inv_mask
         return tensor * mask, self.k
 
+
+class BanLastMCompressor(BaseCompressor):
+    def __init__(self, dim, alpha, M):
+        super().__init__(dim)
+        self.k = int(self.dim * alpha)
+        self.M = M
+        self.history = torch.zeros(self.dim, dtype=torch.int, device='cpu')
+
+    def _get_mask(self):
+        zeros = (self.history == 0).nonzero().flatten()
+        assert len(zeros) >= self.k
+        indices = torch.randperm(len(zeros))[:self.k]
+        assert len(indices) == self.k
+        return torch.zeros_like(self.history).index_fill_(
+            0, zeros[indices], torch.tensor(1),
+        )
+
+    def _update_history(self, mask):
+        self.history -= torch.ones_like(self.history)
+        self.history = torch.maximum(self.history, torch.zeros_like(self.history))
+        self.history += mask * self.M
+
+    def compress(self, tensor):
+        mask = self._get_mask()
+        self._update_history(mask)
+        assert len(mask.nonzero()) > 0
+        return tensor * mask, self.k
